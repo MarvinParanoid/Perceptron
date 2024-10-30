@@ -4,5 +4,7 @@ project(Perceptron)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Perceptron main.cpp
+        Matrix.cpp
+        Matrix.h
         DatasetReader.cpp
         DatasetReader.h)
