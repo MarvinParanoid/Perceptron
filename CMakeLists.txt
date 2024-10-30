@@ -7,4 +7,6 @@ add_executable(Perceptron main.cpp
         Matrix.cpp
         Matrix.h
         DatasetReader.cpp
-        DatasetReader.h)
+        DatasetReader.h
+        ActivateFunction.cpp
+        ActivateFunction.h)
