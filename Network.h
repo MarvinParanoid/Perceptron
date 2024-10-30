@@ -7,7 +7,7 @@
 
 class Network {
     using Vector2D = std::vector<std::vector<double>>;
-    using Layers = std::vector<int>;
+    using Layers = std::vector<uint32_t>;
     Layers mLayers;
     uint32_t mL;
     std::vector<Matrix> mWeights;
@@ -16,12 +16,12 @@ class Network {
     Vector2D mBios;
     ActivateFunction mActFunc;
 
-    int SearchMaxIndex(const std::vector<double> &values);
+    uint32_t SearchMaxIndex(const std::vector<double> &values);
 
 public:
     void Init(Layers layers);
-    void SetInput(std::vector<double> values);
-    double ForwardFeed();
+    std::vector<double> &GetInput() { return mNeuronsVal[0]; }
+    uint32_t ForwardFeed();
     void BackPropagation(double expect);
     void WeightsUpdater(double lr);
 };

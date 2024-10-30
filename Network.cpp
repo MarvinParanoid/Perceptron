@@ -26,11 +26,7 @@ void Network::Init(Network::Layers layers) {
     }
 }
 
-void Network::SetInput(std::vector<double> values) {
-    mNeuronsVal[0] = std::move(values);
-}
-
-double Network::ForwardFeed() {
+uint32_t Network::ForwardFeed() {
     for (int k = 1; k < mL; k++) {
         Matrix::Multi(mWeights[k - 1], mNeuronsVal[k - 1], mNeuronsVal[k]);
         Matrix::SumVector(mNeuronsVal[k], mBios[k - 1]);
@@ -39,7 +35,7 @@ double Network::ForwardFeed() {
     return SearchMaxIndex(mNeuronsVal[mL - 1]);
 }
 
-int Network::SearchMaxIndex(const std::vector<double> &values) {
+uint32_t Network::SearchMaxIndex(const std::vector<double> &values) {
     double max = values[0];
     int prediction = 0;
     for (int j = 1; j < mLayers[mL - 1]; j++) {
