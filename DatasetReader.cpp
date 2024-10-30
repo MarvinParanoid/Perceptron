@@ -23,9 +23,9 @@ DatasetReader::~DatasetReader() {
     mLabel.close();
 }
 
-void DatasetReader::ReadNext(std::array<double, IMG_SIZE> &data, int &expected) {
-    if (mImage.eof() || mLabel.eof()) {
-        throw std::runtime_error("EOF of dataset");
+void DatasetReader::ReadNext(std::vector<double> &data, uint32_t &expected) {
+    if (mImage.eof() || mLabel.eof() || data.size() != IMG_SIZE) {
+        throw std::runtime_error("Error during reading dataset");
     }
     char tmp;
     for (u_int32_t i = 0; i < IMG_SIZE; i++) {

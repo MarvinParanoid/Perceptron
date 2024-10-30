@@ -9,4 +9,6 @@ add_executable(Perceptron main.cpp
         DatasetReader.cpp
         DatasetReader.h
         ActivateFunction.cpp
-        ActivateFunction.h)
+        ActivateFunction.h
+        Network.cpp
+        Network.h)

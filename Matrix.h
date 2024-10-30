@@ -20,7 +20,7 @@ public:
     static void MultiT(const Matrix &matrix, const Vector &neuron, Vector &res);
     static void SumVector(Vector &a, Vector &b);
 
-    // double &operator()(int i, int j);
+    double &operator()(uint32_t i, uint32_t j) { return mMatrix[i][j]; }
 };
 
 

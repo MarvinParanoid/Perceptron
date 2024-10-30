@@ -1,7 +1,7 @@
 #ifndef PERCEPTRON_DATASETREADER_H
 #define PERCEPTRON_DATASETREADER_H
 
-#include <array>
+#include <vector>
 #include <cstdint>
 #include <fstream>
 #include <string_view>
@@ -22,7 +22,7 @@ public:
     DatasetReader(string_view imagePath, string_view labelPath);
     ~DatasetReader();
 
-    void ReadNext(std::array<double, IMG_SIZE> &data, int &expected);
+    void ReadNext(std::vector<double> &data, uint32_t &expected);
 };
 
 

@@ -30,7 +30,7 @@ void Matrix::Multi(const Matrix &matrix, const Vector &neuron, Vector &res) {
     }
 }
 
-void Matrix::MultiT(const Matrix &matrix, const Matrix::Vector &neuron, Matrix::Vector &res) {
+void Matrix::MultiT(const Matrix &matrix, const Vector &neuron, Vector &res) {
     if (matrix.Row() != neuron.size() || matrix.Col() != res.size()) {
         throw std::runtime_error("Multi error");
     }
@@ -43,7 +43,7 @@ void Matrix::MultiT(const Matrix &matrix, const Matrix::Vector &neuron, Matrix::
     }
 }
 
-void Matrix::SumVector(Matrix::Vector &a, Matrix::Vector &b) {
+void Matrix::SumVector(Vector &a, Vector &b) {
     if (a.size() != b.size()) {
         throw std::runtime_error("Sum error");
     }
