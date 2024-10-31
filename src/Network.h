@@ -23,7 +23,7 @@ class Network {
 public:
     void Init(Layers layers);
     std::vector<double> &GetInput() { return mNeuronsVal[0]; }
-    uint32_t ForwardFeed();
+    std::pair<uint32_t, const std::vector<double> *> ForwardFeed();
     void BackPropagation(double expect);
     void WeightsUpdater(double lr);
 

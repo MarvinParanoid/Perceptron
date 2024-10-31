@@ -2,12 +2,14 @@
 #include "Network.h"
 #include "Render.h"
 #include <cmath>
-#include <iostream>
 
 int main() {
     DatasetReader dr("../mnist/train-images.idx3-ubyte", "../mnist/train-labels.idx1-ubyte");
+    Network net;
+    net.Init({DatasetReader::IMG_SIZE, 128, 10});
+
     Render render;
-    sf::Event event;
+    sf::Event event{};
     bool paused = false;
     while (render.window().isOpen()) {
         while (render.window().pollEvent(event) || paused) {
@@ -19,32 +21,24 @@ int main() {
                 paused = false;
             }
         }
-        uint32_t expected;
-        std::vector<double> data(784);
-        dr.ReadNext(data, expected);
-        render.setImage(&data);
-        render.render();
-    }
+        std::vector<double> image(784);
+        std::vector<double> res(10);
+        Data data{&image, &res};
+        dr.ReadNext(image, data.expected);
 
-    //    DatasetReader dr("../mnist/train-images.idx3-ubyte", "../mnist/train-labels.idx1-ubyte");
-    //    Network net;
-    //    net.Init({DatasetReader::IMG_SIZE, 128, 10});
-    //    auto &data = net.GetInput();
-    //    uint32_t expected, predicted;
-    //    for (uint32_t i = 0; i < 1000; i++) {
-    //        uint32_t ra = 0;
-    //        for (uint32_t epoch = 0; epoch < 20; epoch++) {
-    //            dr.ReadNext(data, expected);
-    //            predicted = net.ForwardFeed();
-    //            if (predicted != expected) {
-    //                net.BackPropagation(expected);
-    //                net.WeightsUpdater(0.15 * exp(-epoch / 20.));
-    //            } else {
-    //                ra++;
-    //            }
-    //        }
-    //        std::cout << ra << "\n";
-    //    }
+        for (uint32_t epoch = 0; epoch < 20; epoch++) {
+            auto p = net.ForwardFeed();
+            data.predicted = p.first;
+            data.res = p.second;
+            if (data.predicted != data.expected) {
+                net.BackPropagation(data.expected);
+                //net.WeightsUpdater(0.15 * exp(-epoch / 20.));
+                net.WeightsUpdater(0.5);
+            }
+            render.updateData(&data);
+            render.render();
+        }
+    }
 
     return 0;
 }

@@ -4,19 +4,37 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
+struct Data {
+    const std::vector<double> *image;
+    const std::vector<double> *res;
+    uint32_t expected;
+    uint32_t predicted;
+};
+
 class Render : public sf::Drawable, public sf::Transformable {
-    sf::RenderWindow _window;
-    sf::Font _font;
-    sf::Text _text;
-    const std::vector<double> *_image;
+    sf::RenderWindow mWindow;
+    sf::Font mFont;
+    const Data* mData;
+
+    static constexpr uint32_t PT_SIZE = 30;
+    static constexpr uint32_t IMG_WIDTH = 28;
+    static constexpr uint32_t IMG_HEIGHT = 28;
+    static constexpr uint32_t PADDING = 20;
+    static constexpr uint32_t BORDER_WIDTH = IMG_WIDTH * PT_SIZE;
+    static constexpr uint32_t BORDER_HEIGHT = IMG_HEIGHT * PT_SIZE;
+    static constexpr uint32_t WIDTH = BORDER_WIDTH + 2 * PADDING + 250;
+    static constexpr uint32_t HEIGHT = BORDER_HEIGHT + 2 * PADDING;
+
+    void drawImage(sf::RenderTarget &target, sf::RenderStates states) const;
+    void drawInfo(sf::RenderTarget &target, sf::RenderStates states) const;
 
 public:
     Render();
-    void setImage(const std::vector<double>* image);
+    void updateData(const Data *data);
     bool init();
     void render();
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-    sf::RenderWindow &window() { return _window; };
+    sf::RenderWindow &window() { return mWindow; };
 };
 
 

@@ -1,6 +1,7 @@
 #include "Network.h"
 #include <cstdlib>
 #include <ctime>
+#include <utility>
 
 void Network::Init(Network::Layers layers) {
     srand(std::time(nullptr));
@@ -26,13 +27,13 @@ void Network::Init(Network::Layers layers) {
     }
 }
 
-uint32_t Network::ForwardFeed() {
+std::pair<uint32_t, const std::vector<double> *> Network::ForwardFeed() {
     for (int k = 1; k < mL; k++) {
         Matrix::Multi(mWeights[k - 1], mNeuronsVal[k - 1], mNeuronsVal[k]);
         Matrix::SumVector(mNeuronsVal[k], mBios[k - 1]);
         mActFunc.Use(mNeuronsVal[k]);
     }
-    return SearchMaxIndex(mNeuronsVal[mL - 1]);
+    return {SearchMaxIndex(mNeuronsVal[mL - 1]), &mNeuronsVal[mL - 1]};
 }
 
 uint32_t Network::SearchMaxIndex(const std::vector<double> &values) {
