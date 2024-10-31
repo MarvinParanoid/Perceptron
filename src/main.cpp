@@ -8,8 +8,11 @@ int main() {
     Network net;
     net.Init({DatasetReader::IMG_SIZE, 128, 10});
 
-    Render render;
     sf::Event event{};
+    std::vector<double> image(784);
+    std::vector<double> res(10);
+    Data data{&image, &res};
+    Render render(&data);
     bool paused = false;
     while (render.window().isOpen()) {
         while (render.window().pollEvent(event) || paused) {
@@ -21,9 +24,6 @@ int main() {
                 paused = false;
             }
         }
-        std::vector<double> image(784);
-        std::vector<double> res(10);
-        Data data{&image, &res};
         dr.ReadNext(image, data.expected);
 
         for (uint32_t epoch = 0; epoch < 20; epoch++) {
@@ -35,7 +35,6 @@ int main() {
                 //net.WeightsUpdater(0.15 * exp(-epoch / 20.));
                 net.WeightsUpdater(0.5);
             }
-            render.updateData(&data);
             render.render();
         }
     }

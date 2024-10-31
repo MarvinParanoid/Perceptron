@@ -29,8 +29,7 @@ class Render : public sf::Drawable, public sf::Transformable {
     void drawInfo(sf::RenderTarget &target, sf::RenderStates states) const;
 
 public:
-    Render();
-    void updateData(const Data *data);
+    explicit Render(const Data *data);
     bool init();
     void render();
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;

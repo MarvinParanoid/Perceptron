@@ -1,6 +1,6 @@
 #include "Render.h"
 
-Render::Render() {
+Render::Render(const Data *data) : mData(data) {
     init();
 }
 
@@ -53,6 +53,3 @@ void Render::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     drawInfo(target, states);
 }
 
-void Render::updateData(const Data *data) {
-    mData = data;
-}
