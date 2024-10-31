@@ -5,6 +5,8 @@
 #include "Matrix.h"
 #include <vector>
 
+// todo: optimize it with MT
+
 class Network {
     using Vector2D = std::vector<std::vector<double>>;
     using Layers = std::vector<uint32_t>;
@@ -24,6 +26,10 @@ public:
     uint32_t ForwardFeed();
     void BackPropagation(double expect);
     void WeightsUpdater(double lr);
+
+    // todo
+    void StoreWeights();
+    void LoadWeights();
 };
 
 
