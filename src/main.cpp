@@ -2,12 +2,11 @@
 #include "Network.h"
 #include "Render.h"
 #include <cmath>
-#include <iostream>
 
 int main() {
     DatasetReader dr("../mnist/train-images.idx3-ubyte", "../mnist/train-labels.idx1-ubyte");
     Render render;
-    sf::Event event;
+    sf::Event event{};
     bool paused = false;
     while (render.window().isOpen()) {
         while (render.window().pollEvent(event) || paused) {
@@ -19,10 +18,11 @@ int main() {
                 paused = false;
             }
         }
+        std::vector<double> image(784);
+        Data data{&image};
         uint32_t expected;
-        std::vector<double> data(784);
-        dr.ReadNext(data, expected);
-        render.setImage(&data);
+        dr.ReadNext(image, expected);
+        render.updateData(&data);
         render.render();
     }
 
