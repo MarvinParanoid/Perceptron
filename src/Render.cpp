@@ -1,4 +1,5 @@
 #include "Render.h"
+#include <sstream>
 
 Render::Render(const Data *data) : mData(data) {
     init();
@@ -40,12 +41,13 @@ void Render::drawInfo(sf::RenderTarget &target, sf::RenderStates states) const {
     sf::Text text("", mFont, 30);
     text.setPosition(BORDER_WIDTH + PADDING * 2, PADDING);
     text.setFillColor({0, 0, 0});
-    std::string str = "Expected: " + std::to_string(mData->expected) + "\nPredicted: " + std::to_string(mData->predicted);
+    std::stringstream ss;
+    ss << "Expected: " << std::to_string(mData->expected) << "\nPredicted: " << std::to_string(mData->predicted);
     for (uint32_t i = 0; i < mData->res->size(); i++) {
-        str += "\n" + std::to_string(i) + ": " + std::to_string((*mData->res)[i]);
+        ss << "\n" << std::to_string(i) << ": " << std::to_string((*mData->res)[i]);
     }
-    text.setString(str);
-    target.draw(text, states);
+    text.setString(ss.str());
+    target.draw(text , states);
 }
 
 void Render::draw(sf::RenderTarget &target, sf::RenderStates states) const {
