@@ -6,7 +6,6 @@
 class ActivateFunction {
 public:
     void Use(Vector &v);
-    void UseDer(Vector &v);
     double UseDer(double value);
 };
 

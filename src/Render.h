@@ -5,8 +5,8 @@
 #include <vector>
 
 struct Data {
-    const std::vector<double> *image;
-    const std::vector<double> *res;
+    std::vector<double> *image;
+    std::vector<double> *res;
     uint32_t expected;
     uint32_t predicted;
 };
@@ -14,7 +14,7 @@ struct Data {
 class Render : public sf::Drawable, public sf::Transformable {
     sf::RenderWindow mWindow;
     sf::Font mFont;
-    const Data* mData;
+    const Data *mData;
 
     static constexpr uint32_t PT_SIZE = 30;
     static constexpr uint32_t IMG_WIDTH = 28;

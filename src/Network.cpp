@@ -4,10 +4,8 @@
 #include <fstream>
 #include <utility>
 
-void Network::Init(Network::Layers layers) {
+Network::Network(Network::Layers layers) : mLayers(std::move(layers)), mL(mLayers.size()) {
     srand(std::time(nullptr));
-    mLayers = std::move(layers);
-    mL = mLayers.size();
 
     mNeuronsVal.resize(mL);
     mNeuronsErr.resize(mL);
@@ -28,13 +26,13 @@ void Network::Init(Network::Layers layers) {
     }
 }
 
-std::pair<uint32_t, const std::vector<double> *> Network::ForwardFeed() {
+uint32_t Network::ForwardFeed() {
     for (int k = 1; k < mL; k++) {
         Matrix::Multi(mWeights[k - 1], mNeuronsVal[k - 1], mNeuronsVal[k]);
         Matrix::SumVector(mNeuronsVal[k], mBios[k - 1]);
         mActFunc.Use(mNeuronsVal[k]);
     }
-    return {SearchMaxIndex(mNeuronsVal[mL - 1]), &mNeuronsVal[mL - 1]};
+    return SearchMaxIndex(mNeuronsVal[mL - 1]);
 }
 
 uint32_t Network::SearchMaxIndex(const std::vector<double> &values) {
@@ -138,4 +136,12 @@ void Network::LoadWeights() {
     deserialize(is, mLayers);
     deserialize(is, mWeights);
     deserialize(is, mBios);
+
+    mL = mLayers.size();
+    mNeuronsVal.resize(mL);
+    mNeuronsErr.resize(mL);
+    for (uint32_t i = 0; i < mL; i++) {
+        mNeuronsVal[i].resize(mLayers[i]);
+        mNeuronsErr[i].resize(mLayers[i]);
+    }
 }

@@ -4,18 +4,22 @@
 #include <cmath>
 #include <iostream>
 
-int main() {
+constexpr uint32_t epoch = 10;
+constexpr uint32_t learning_samples = 60000;
+constexpr uint32_t training_samples = 10000;
+constexpr uint32_t lfirst = DatasetReader::IMG_SIZE;
+constexpr uint32_t llast = 10;
+constexpr uint32_t hidden = 128;
+
+void learning() {
     DatasetReader dr("../mnist/train-images.idx3-ubyte", "../mnist/train-labels.idx1-ubyte");
-    Network net;
-    net.Init({DatasetReader::IMG_SIZE, 128, 10});
+    Network net({lfirst, hidden, llast});
 
     sf::Event event{};
-    std::vector<double> image(784);
-    std::vector<double> res(10);
-    Data data{&image, &res};
+    Data data{&net.GetFirstLayer(), &net.GetLastLayer()};
     Render render(&data);
     bool paused = false;
-    for (uint32_t i = 0; i < 10000 && render.window().isOpen(); i++) {
+    for (uint32_t i = 0; i < learning_samples && render.window().isOpen(); i++) {
         while (render.window().pollEvent(event) || paused) {
             if (event.type == sf::Event::Closed) {
                 render.window().close();
@@ -25,15 +29,13 @@ int main() {
                 paused = false;
             }
         }
-        dr.ReadNext(image, data.expected);
+        dr.ReadNext(net.GetFirstLayer(), data.expected);
 
-        for (uint32_t epoch = 0; epoch < 10; epoch++) {
-            auto p = net.ForwardFeed();
-            data.predicted = p.first;
-            data.res = p.second;
+        for (uint32_t j = 0; j < epoch; j++) {
+            data.predicted = net.ForwardFeed();
             if (data.predicted != data.expected) {
                 net.BackPropagation(data.expected);
-                //net.WeightsUpdater(0.15 * exp(-epoch / 20.));
+                //net.WeightsUpdater(0.15 * exp(-j / 20.));
                 net.WeightsUpdater(0.5);
             }
             render.render();
@@ -41,6 +43,40 @@ int main() {
     }
 
     net.StoreWeights();
+}
 
+void testing() {
+    DatasetReader dr("../mnist/t10k-images.idx3-ubyte", "../mnist/t10k-labels.idx1-ubyte");
+    Network net;
+    net.LoadWeights();
+
+    sf::Event event{};
+    Data data{&net.GetFirstLayer(), &net.GetLastLayer()};
+    Render render(&data);
+    bool paused = false;
+    uint32_t ra = 0;
+    for (uint32_t i = 0; i < training_samples && render.window().isOpen(); i++) {
+        while (render.window().pollEvent(event) || paused) {
+            if (event.type == sf::Event::Closed) {
+                render.window().close();
+            } else if (event.type == sf::Event::KeyPressed) {
+                paused = true;
+            } else if (event.type == sf::Event::KeyReleased) {
+                paused = false;
+            }
+        }
+        dr.ReadNext(net.GetFirstLayer(), data.expected);
+        data.predicted = net.ForwardFeed();
+        if (data.predicted == data.expected) {
+            ra++;
+        }
+        render.render();
+    }
+    std::cout << "Accuracy rate: " << (static_cast<double>(ra) / training_samples) * 100.0 << "\n";
+}
+
+int main() {
+    learning();
+    // testing();
     return 0;
 }

@@ -8,8 +8,11 @@
 // todo: optimize it with MT
 
 class Network {
+public:
     using Vector2D = std::vector<std::vector<double>>;
     using Layers = std::vector<uint32_t>;
+
+private:
     Layers mLayers;
     uint32_t mL;
     std::vector<Matrix> mWeights;
@@ -21,12 +24,16 @@ class Network {
     uint32_t SearchMaxIndex(const std::vector<double> &values);
 
 public:
-    void Init(Layers layers);
-    std::pair<uint32_t, const std::vector<double> *> ForwardFeed();
+    explicit Network() = default;
+    explicit Network(Layers layers);
+
+    uint32_t ForwardFeed();
     void BackPropagation(double expect);
     void WeightsUpdater(double lr);
 
-    // todo
+    std::vector<double> &GetFirstLayer() { return mNeuronsVal.front(); }
+    std::vector<double> &GetLastLayer() { return mNeuronsVal.back(); }
+
     void StoreWeights();
     void LoadWeights();
 };
