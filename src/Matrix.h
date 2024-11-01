@@ -20,8 +20,9 @@ public:
     static void MultiT(const Matrix &matrix, const Vector &neuron, Vector &res);
     static void SumVector(Vector &a, Vector &b);
 
+    const std::vector<Vector> &data() const { return mMatrix; }
+    std::vector<Vector> &data() { return mMatrix; }
     double &operator()(uint32_t i, uint32_t j) { return mMatrix[i][j]; }
 };
-
 
 #endif//PERCEPTRON_MATRIX_H

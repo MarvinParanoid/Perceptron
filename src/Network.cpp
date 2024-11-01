@@ -1,6 +1,7 @@
 #include "Network.h"
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 #include <utility>
 
 void Network::Init(Network::Layers layers) {
@@ -77,4 +78,64 @@ void Network::WeightsUpdater(double lr) {
             mBios[i][k] += mNeuronsErr[i + 1][k] * lr;
         }
     }
+}
+
+template<typename T>
+typename std::enable_if_t<std::is_trivial_v<T>, bool> serialize(std::ofstream &os, const std::vector<T> &v) {
+    auto size = v.size();
+    os.write(reinterpret_cast<char const *>(&size), sizeof(size));
+    os.write(reinterpret_cast<char const *>(v.data()), sizeof(T) * v.size());
+    return 0;
+}
+
+template<typename T>
+typename std::enable_if_t<!std::is_trivial_v<T>, bool> serialize(std::ofstream &os, const std::vector<T> &v) {
+    auto size = v.size();
+    os.write(reinterpret_cast<char const *>(&size), sizeof(size));
+    for (auto &i: v) {
+        serialize(os, i);
+    }
+    return 0;
+}
+
+void serialize(std::ofstream &os, const Matrix &v) {
+    serialize(os, v.data());
+}
+
+template<typename T>
+typename std::enable_if_t<std::is_trivial_v<T>, bool> deserialize(std::ifstream &is, std::vector<T> &v) {
+    decltype(v.size()) size;
+    is.read(reinterpret_cast<char *>(&size), sizeof(size));
+    v.resize(size);
+    is.read(reinterpret_cast<char *>(v.data()), v.size() * sizeof(T));
+    return 0;
+}
+
+template<typename T>
+typename std::enable_if_t<!std::is_trivial_v<T>, bool> deserialize(std::ifstream &is, std::vector<T> &v) {
+    decltype(v.size()) size;
+    is.read(reinterpret_cast<char *>(&size), sizeof(size));
+    v.resize(size);
+    for (auto &i: v) {
+        deserialize(is, i);
+    }
+    return 0;
+}
+
+void deserialize(std::ifstream &os, Matrix &v) {
+    deserialize(os, v.data());
+}
+
+void Network::StoreWeights() {
+    std::ofstream os("../weights.dat", std::ios::binary);
+    serialize(os, mLayers);
+    serialize(os, mWeights);
+    serialize(os, mBios);
+}
+
+void Network::LoadWeights() {
+    std::ifstream is("../weights.dat", std::ios::binary);
+    deserialize(is, mLayers);
+    deserialize(is, mWeights);
+    deserialize(is, mBios);
 }

@@ -2,6 +2,7 @@
 #include "Network.h"
 #include "Render.h"
 #include <cmath>
+#include <iostream>
 
 int main() {
     DatasetReader dr("../mnist/train-images.idx3-ubyte", "../mnist/train-labels.idx1-ubyte");
@@ -14,7 +15,7 @@ int main() {
     Data data{&image, &res};
     Render render(&data);
     bool paused = false;
-    while (render.window().isOpen()) {
+    for (uint32_t i = 0; i < 10000 && render.window().isOpen(); i++) {
         while (render.window().pollEvent(event) || paused) {
             if (event.type == sf::Event::Closed) {
                 render.window().close();
@@ -26,7 +27,7 @@ int main() {
         }
         dr.ReadNext(image, data.expected);
 
-        for (uint32_t epoch = 0; epoch < 20; epoch++) {
+        for (uint32_t epoch = 0; epoch < 10; epoch++) {
             auto p = net.ForwardFeed();
             data.predicted = p.first;
             data.res = p.second;
@@ -38,6 +39,8 @@ int main() {
             render.render();
         }
     }
+
+    net.StoreWeights();
 
     return 0;
 }
