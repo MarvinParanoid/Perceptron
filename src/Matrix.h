@@ -13,10 +13,13 @@ class Matrix {
 
 public:
     void Init(uint32_t row, uint32_t col);
+
     void Rand();
 
     static void Multi(const Matrix &matrix, const Vector &neuron, Vector &res);
+
     static void MultiT(const Matrix &matrix, const Vector &neuron, Vector &res);
+
     static void SumVector(Vector &a, Vector &b);
 
     const std::vector<Vector> &data() const { return mMatrix; }

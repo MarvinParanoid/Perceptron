@@ -42,7 +42,8 @@ void learning() {
             }
             render.render();
         }
-        std::cout << "Epoch: " << i << "; Accuracy rate: " << (static_cast<double>(ar) / learning_samples) * 100.0 << "\n";
+        std::cout << "Epoch: " << i << "; Accuracy rate: " << (static_cast<double>(ar) / learning_samples) * 100.0 <<
+                "\n";
     }
     const auto end{std::chrono::steady_clock::now()};
     const std::chrono::duration<double> elapsed_seconds{end - start};

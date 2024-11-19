@@ -25,12 +25,17 @@ class Render : public sf::Drawable, public sf::Transformable {
     static constexpr uint32_t HEIGHT = BORDER_HEIGHT + 2 * PADDING;
 
     void drawImage(sf::RenderTarget &target, sf::RenderStates states) const;
+
     void drawInfo(sf::RenderTarget &target, sf::RenderStates states) const;
 
 public:
     explicit Render(const Data *data);
+
     bool init();
+
     void render();
+
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
     sf::RenderWindow &window() { return mWindow; };
 };

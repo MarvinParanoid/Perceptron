@@ -19,6 +19,7 @@ public:
     static constexpr uint32_t SAMPLES_COUNT = 60000;
 
     DatasetReader(string_view imagePath, string_view labelPath);
+
     ~DatasetReader();
 
     void ReadNext(std::vector<double> &data, uint32_t &expected);
