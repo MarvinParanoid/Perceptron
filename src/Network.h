@@ -1,5 +1,4 @@
-#ifndef PERCEPTRON_NETWORK_H
-#define PERCEPTRON_NETWORK_H
+#pragma once
 
 #include "ActivateFunction.h"
 #include "Matrix.h"
@@ -37,6 +36,3 @@ public:
     void StoreWeights();
     void LoadWeights();
 };
-
-
-#endif//PERCEPTRON_NETWORK_H

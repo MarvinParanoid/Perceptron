@@ -1,5 +1,4 @@
-#ifndef PERCEPTRON_MATRIX_H
-#define PERCEPTRON_MATRIX_H
+#pragma once
 
 #include <cstdint>
 #include <vector>
@@ -24,5 +23,3 @@ public:
     std::vector<Vector> &data() { return mMatrix; }
     double &operator()(uint32_t i, uint32_t j) { return mMatrix[i][j]; }
 };
-
-#endif//PERCEPTRON_MATRIX_H

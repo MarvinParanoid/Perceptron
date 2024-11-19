@@ -1,5 +1,4 @@
-#ifndef PERCEPTRON_RENDER_H
-#define PERCEPTRON_RENDER_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -35,6 +34,3 @@ public:
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
     sf::RenderWindow &window() { return mWindow; };
 };
-
-
-#endif//PERCEPTRON_RENDER_H

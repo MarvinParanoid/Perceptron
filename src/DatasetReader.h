@@ -1,5 +1,4 @@
-#ifndef PERCEPTRON_DATASETREADER_H
-#define PERCEPTRON_DATASETREADER_H
+#pragma once
 
 #include <vector>
 #include <cstdint>
@@ -24,6 +23,3 @@ public:
 
     void ReadNext(std::vector<double> &data, uint32_t &expected);
 };
-
-
-#endif//PERCEPTRON_DATASETREADER_H
