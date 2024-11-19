@@ -20,7 +20,7 @@ void learning() {
 
     for (uint32_t i = 0; i < epoch; i++) {
         uint32_t ar = 0;
-        DatasetReader dr("../mnist/train-images.idx3-ubyte", "../mnist/train-labels.idx1-ubyte");
+        DatasetReader dr("../resources/mnist/train-images.idx3-ubyte", "../resources/mnist/train-labels.idx1-ubyte");
         for (uint32_t j = 0; j < learning_samples; j++) {
             while (render.window().pollEvent(event) || paused) {
                 if (event.type == sf::Event::Closed) {
@@ -52,7 +52,7 @@ void learning() {
 
 void testing() {
     const auto start{std::chrono::steady_clock::now()};
-    DatasetReader dr("../mnist/t10k-images.idx3-ubyte", "../mnist/t10k-labels.idx1-ubyte");
+    DatasetReader dr("../resources/mnist/t10k-images.idx3-ubyte", "../resources/mnist/t10k-labels.idx1-ubyte");
     Network net;
     net.LoadWeights();
     sf::Event event{};

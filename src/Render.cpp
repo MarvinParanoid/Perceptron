@@ -8,8 +8,8 @@ Render::Render(const Data *data) : mData(data) {
 bool Render::init() {
     setPosition(50.f, 50.f);
     mWindow.create(sf::VideoMode(WIDTH, HEIGHT), "Perceptron");
-    //mWindow.setFramerateLimit(120);
-    mFont.loadFromFile("../RobotoMono-Regular.ttf");
+    // mWindow.setFramerateLimit(120);
+    mFont.loadFromFile("../resources/RobotoMono-Regular.ttf");
     return true;
 }
 
@@ -47,11 +47,10 @@ void Render::drawInfo(sf::RenderTarget &target, sf::RenderStates states) const {
         ss << "\n" << std::to_string(i) << ": " << std::to_string((*mData->res)[i]);
     }
     text.setString(ss.str());
-    target.draw(text , states);
+    target.draw(text, states);
 }
 
 void Render::draw(sf::RenderTarget &target, sf::RenderStates states) const {
     drawImage(target, states);
     drawInfo(target, states);
 }
-
