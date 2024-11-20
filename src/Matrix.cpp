@@ -17,14 +17,18 @@ void Matrix::Rand() {
     }
 }
 
+// todo: slowest part, need to use intrinsics or math library
 void Matrix::Multi(const Matrix &matrix, const Vector &neuron, Vector &res) {
     if (matrix.Col() != neuron.size() || matrix.Row() != res.size()) {
         throw std::runtime_error("Multi error");
     }
-    for (uint32_t i = 0; i < matrix.Row(); i++) {
+    auto col = matrix.Col();
+    for (uint32_t i = 0; i < matrix.Row(); ++i) {
         double tmp = 0;
-        for (int j = 0; j < matrix.Col(); j++) {
-            tmp += matrix.mMatrix[i][j] * neuron[j];
+        auto neuronPtr = neuron.data();
+        auto matrixRowPtr = matrix.mMatrix[i].data();
+        for (uint32_t j = 0; j < col; ++j) {
+            tmp += *matrixRowPtr++ * *neuronPtr++;
         }
         res[i] = tmp;
     }
@@ -34,9 +38,10 @@ void Matrix::MultiT(const Matrix &matrix, const Vector &neuron, Vector &res) {
     if (matrix.Row() != neuron.size() || matrix.Col() != res.size()) {
         throw std::runtime_error("Multi error");
     }
+    auto row = matrix.Row();
     for (uint32_t i = 0; i < matrix.Col(); i++) {
         double tmp = 0;
-        for (int j = 0; j < matrix.Row(); j++) {
+        for (uint32_t j = 0; j < row; j++) {
             tmp += matrix.mMatrix[j][i] * neuron[j];
         }
         res[i] = tmp;
